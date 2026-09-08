@@ -5,14 +5,17 @@ import { Type } from 'class-transformer';
 export class CreateTemperatureSensorDto {
  @IsNotEmpty()
  @IsString()
- sensorName: string;
+    sensorName: string;
+    
  @IsNotEmpty()
  @Type(() => Number) //
  @IsNumber()
- value: number;
+    value: number;
+    
  @IsNotEmpty()
  @IsString()
- unit: string;
+    unit: string;
+    
  @IsOptional()
  timestamp?: Date;
 }
