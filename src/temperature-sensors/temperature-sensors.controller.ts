@@ -3,7 +3,7 @@ import { TemperatureSensorsService } from './temperature-sensors.service';
 import { CreateTemperatureSensorDto } from './dto/create-temperature-sensor.dto';
 import { UpdateTemperatureSensorDto } from './dto/update-temperature-sensor.dto';
 
-@Controller('sensors')
+@Controller('temperature-sensors')
 export class TemperatureSensorsController {
   constructor(private readonly sensorsService: TemperatureSensorsService) {}
 
