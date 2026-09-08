@@ -7,12 +7,12 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 
-  app.enableCors({
-    origin: '*',
+app.enableCors({
+    origin: true, // Автоматично відображає Origin того, хто запитує (Vercel або Localhost)
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-  
+
   const port = process.env.PORT || 3000;
   await app.listen(port);
 }
