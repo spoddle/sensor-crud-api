@@ -1,34 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete,} from '@nestjs/common';
 import { TemperatureSensorsService } from './temperature-sensors.service';
 import { CreateTemperatureSensorDto } from './dto/create-temperature-sensor.dto';
 import { UpdateTemperatureSensorDto } from './dto/update-temperature-sensor.dto';
 
 @Controller('temperature-sensors')
 export class TemperatureSensorsController {
-  constructor(private readonly sensorsService: TemperatureSensorsService) {}
+  constructor(
+    private readonly temperatureSensorsService: TemperatureSensorsService,
+  ) {}
 
   @Post()
-  create(@Body() createSensorDto: CreateTemperatureSensorDto) {
-    return this.sensorsService.create(createSensorDto);
+  async create(@Body() createTemperatureSensorDto: CreateTemperatureSensorDto) {
+    return await this.temperatureSensorsService.create(createTemperatureSensorDto);
   }
 
   @Get()
-  findAll() {
-    return this.sensorsService.findAll();
+  async findAll() {
+    return await this.temperatureSensorsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sensorsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.temperatureSensorsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSensorDto: UpdateTemperatureSensorDto) {
-    return this.sensorsService.update(id, updateSensorDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateTemperatureSensorDto: UpdateTemperatureSensorDto,
+  ) {
+    return await this.temperatureSensorsService.update(id, updateTemperatureSensorDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sensorsService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.temperatureSensorsService.remove(id);
   }
 }
