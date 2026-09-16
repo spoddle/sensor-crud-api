@@ -22,7 +22,7 @@ export class TemperatureSensorsController {
     return this.temperatureSensorsService.findAll();
   }
 
-    @Sse('alerts')
+  @Sse('alerts')
   getAlerts(): Observable<MessageEvent> {
     return this.alertsService.getAlertStream().pipe(
       map((alert) => ({

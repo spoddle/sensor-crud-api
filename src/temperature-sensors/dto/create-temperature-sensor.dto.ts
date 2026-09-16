@@ -1,6 +1,5 @@
 //export class CreateTemperatureSensorDto { }
-import { IsNotEmpty, IsString, IsNumber, IsOptional } from
-'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 export class CreateTemperatureSensorDto {
  @IsNotEmpty()
@@ -8,7 +7,7 @@ export class CreateTemperatureSensorDto {
     sensorName: string;
     
  @IsNotEmpty()
- @Type(() => Number) //
+ @Type(() => Number)
  @IsNumber()
     value: number;
     

@@ -12,15 +12,15 @@ export class TemperatureSensorsService {
   constructor(
     @InjectRepository(TemperatureSensor)
     private readonly temperatureSensorRepository: Repository<TemperatureSensor>,
-    private readonly temperatureAlertsService: TemperatureAlertsService,
+    private readonly alertsService: TemperatureAlertsService,
   ) {}
 
   async create(createSensorDto: CreateTemperatureSensorDto) {
     const record = this.temperatureSensorRepository.create(createSensorDto);
     const saved = await this.temperatureSensorRepository.save(record);
     if (saved.value <= this.CRITICAL_TEMP) {
-      this.temperatureAlertsService.emitAlert({
-        message: `Critical temperature. Value ${saved.value} ${saved.unit}`,
+      this.alertsService.emitAlert({
+        message: `Critical temperature! Value ${saved.value} ${saved.unit}`,
         temperature: saved.value,
         sensorName: saved.sensorName,
         timestamp: saved.timestamp,
@@ -29,31 +29,36 @@ export class TemperatureSensorsService {
     }
     return saved;
   }
-  async findAll(): Promise<TemperatureSensor[]> {
+  async findAll(){
     return await this.temperatureSensorRepository.find({
-      order: { createdAt: 'DESC' },
+      order: { createdAt: 'ASC' },
       take: 50,
     });
   }
 
-  async findOne(id: string): Promise<TemperatureSensor> {
+  async findOne(id: string){
     const sensor = await this.temperatureSensorRepository.findOne({ where: { id } });
-    if (!sensor) {
-      throw new NotFoundException(`Sensor with id ${id} not found`);
-    }
+    if (!sensor) throw new NotFoundException(`Sensor with id ${id} not found`);
     return sensor;
   }
 
-  async update(
-    id: string,
-    updateSensorDto: UpdateTemperatureSensorDto,
-  ): Promise<TemperatureSensor> {
+  async update (id: string, updateSensorDto: UpdateTemperatureSensorDto){
     const sensor = await this.findOne(id);
     Object.assign(sensor, updateSensorDto);
-    return await this.temperatureSensorRepository.save(sensor);
+    const saved = await this.temperatureSensorRepository.save(sensor);
+    if (saved.value <= this.CRITICAL_TEMP) {
+      this.alertsService.emitAlert({
+        message: `Critical temperature! Value ${saved.value} ${saved.unit}`,
+        temperature: saved.value,
+        sensorName: saved.sensorName,
+        timestamp: saved.timestamp,
+        severity: 'critical'
+      });
+    }
+    return saved;
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string){
     const sensor = await this.findOne(id);
     await this.temperatureSensorRepository.remove(sensor);
   }
